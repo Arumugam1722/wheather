@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css">
+  <style>
+    /* Add any custom styles here */
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="mt-5 mb-4">Weather App</h1>
+    <form action="/weather" method="get" class="mb-4">
+      <div class="input-group">
+        <input type="text" name="city" class="form-control" placeholder="Enter city name" required>
+        <div class="input-group-append">
+          <button type="submit" class="search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+    </form>
+
+    <% if (error) { %>
+      <div class="alert alert-danger mt-4"><%= error %></div>
+    <% } else if (weather) { %>
+      <div class="card mb-4">
+        <div class="card-body">
+          <h3 class="card-title"><%= weather.name %>, <%= weather.sys.country %></h3>
+          <p class="card-text">
+            <i class="fas fa-thermometer-half"></i>
+            Temperature: <%= ((weather.main.temp - 32) * 5 / 9).toFixed(2) %>&deg;C
+          </p>
+          <p class="card-text">
+            <i class="fas fa-cloud"></i>
+            Weather: <%= weather.weather[0].description %>
+          </p>
+          <p class="card-text">
+            <i class="fas fa-cloud"></i>
+            Feels like: <%= weather.main.feels_like %>
+          </p>
+          <p class="card-text">
+            <i class="fas fa-cloud"></i>
+            Humidity: <%= weather.main.humidity %>
+          </p>
+          <p class="card-text">
+            <i class="fas fa-cloud"></i>
+            Visibility: <%= weather.visibility %>
+          </p>
+          <p class="card-text">
+            <i class="fas fa-wind"></i>
+            Wind: <%= weather.wind.speed %>
+          </p>
+          <p class="card-text">
+            <i class="fas fa-cloud"></i>
+            Pressure: <%= weather.main.pressure %>
+          </p>
+        </div>
+      </div>
+      <button type="submit" class="prev" onclick="previousCity()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+          <path  d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+        </svg>
+      </button>
+      <button type="submit" class="next" onclick="nextCity()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+          <path d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+        </svg>
+      </button>
+
+  
+
+      <% if (forecast) { %>
+        <h2 class="mb-4" >3-Hours Forecast</h2>
+        <section class="three-hrs">
+        <div class="row">
+            <div class="">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title"><%= fiveForecast.list[0].dt_txt  %></h5>
+                  <!-- Debugging output for timestamp -->
+                  <p class="card-text">
+                    <i class="fas fa-thermometer-half"></i>
+                    Temperature: <%= ((fiveForecast.list[0].main.temp - 32) * 5 / 9).toFixed(2) %>&deg;C
+                  </p>
+                  <p class="card-text">
+                    <i class="fas fa-cloud"></i>
+                    Weather: <%= fiveForecast.list[0].weather[0].description %>
+                  </p>
+                  <p class="card-text">
+                    <i class="fas fa-cloud"></i>
+                    Feels like: <%= fiveForecast.list[0].main.feels_like %>
+                  </p>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title"><%= fiveForecast.list[1].dt_txt  %></h5>
+                  <!-- Debugging output for timestamp -->
+                  <p class="card-text">
+                    <i class="fas fa-thermometer-half"></i>
+                    Temperature: <%= ((fiveForecast.list[1].main.temp - 32) * 5 / 9).toFixed(2) %>&deg;C
+                  </p>
+                  <p class="card-text">
+                    <i class="fas fa-cloud"></i>
+                    Weather: <%= fiveForecast.list[1].weather[0].description %>
+                  </p>
+                  <p class="card-text">
+                    <i class="fas fa-cloud"></i>
+                    Feels like: <%= fiveForecast.list[1].main.feels_like %>
+                  </p>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="row">
+          <div class="">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"><%= fiveForecast.list[2].dt_txt  %></h5>
+                <!-- Debugging output for timestamp -->
+                <p class="card-text">
+                  <i class="fas fa-thermometer-half"></i>
+                  Temperature: <%= ((fiveForecast.list[2].main.temp - 32) * 5 / 9).toFixed(2) %>&deg;C
+                </p>
+                <p class="card-text">
+                  <i class="fas fa-cloud"></i>
+                  Weather: <%= fiveForecast.list[2].weather[0].description %>
+                </p>
+                <p class="card-text">
+                  <i class="fas fa-cloud"></i>
+                  Feels like: <%= fiveForecast.list[2].main.feels_like %>
+                </p>
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <div class="row">
+        <div class="">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><%= fiveForecast.list[3].dt_txt  %></h5>
+              <!-- Debugging output for timestamp -->
+              <p class="card-text">
+                <i class="fas fa-thermometer-half"></i>
+                Temperature: <%= ((fiveForecast.list[3].main.temp - 32) * 5 / 9).toFixed(2) %>&deg;C
+              </p>
+              <p class="card-text">
+                <i class="fas fa-cloud"></i>
+                Weather: <%= fiveForecast.list[3].weather[0].description %>
+              </p>
+              <p class="card-text">
+                <i class="fas fa-cloud"></i>
+                Feels like: <%= fiveForecast.list[3].main.feels_like %>
+              </p>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="row">
+      <div class="">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"><%= fiveForecast.list[4].dt_txt  %></h5>
+            <!-- Debugging output for timestamp -->
+            <p class="card-text">
+              <i class="fas fa-thermometer-half"></i>
+              Temperature: <%= ((fiveForecast.list[4].main.temp - 32) * 5 / 9).toFixed(2) %>&deg;C
+            </p>
+            <p class="card-text">
+              <i class="fas fa-cloud"></i>
+              Weather: <%= fiveForecast.list[4].weather[0].description %>
+            </p>
+            <p class="card-text">
+              <i class="fas fa-cloud"></i>
+              Feels like: <%= fiveForecast.list[4].main.feels_like %>
+            </p>
+          </div>
+        </div>
+      </div>
+  </div>
+</section>
+      <% } %>
+
+      
+    <% } %>
+  </div>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    function previousCity() {
+      window.location.href = `/weather?direction=prev`;
+    }
+
+    function nextCity() {
+      window.location.href = `/weather?direction=next`;
+    }
+
+  </script>
+</body>
+</html>
+
